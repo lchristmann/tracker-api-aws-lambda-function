@@ -39,6 +39,10 @@ To deploy this AWS Lambda function, zip it while excluding the `README.md`, the 
 
 Run `zip -r tracker-api-aws-lambda-function.zip . -x "README.md" -x ".git/*" -x ".gitignore"` (tested on Linux Ubuntu)
 
+Then go to the Lambda function in the AWS Management Console > Upload from > .zip file and choose the created file.
+
+Finally select "Actions > Publish new version > Publish" for the Lambda function.
+
 ## Testing
 
 The Lambda function can be tested **in the AWS Management Console** with the "Test" feature in the Lambda console:
