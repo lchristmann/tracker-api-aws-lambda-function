@@ -14,10 +14,10 @@ export const handler = async (event) => {
   try {
     // Parse request body
     const body = JSON.parse(event.body);
-    const { timestamp, longitude, latitude } = body;
+    const { timestamp, latitude, longitude } = body;
 
     // Validate input
-    if (!timestamp || typeof longitude !== 'number' || typeof latitude !== 'number') {
+    if (!timestamp || typeof latitude !== 'number' || typeof longitude !== 'number') {
       return {
         statusCode: 400,
         body: JSON.stringify({ error: 'Invalid input payload' })
@@ -25,7 +25,7 @@ export const handler = async (event) => {
     }
 
     // Construct new record
-    const newRecord = { timestamp, longitude, latitude };
+    const newRecord = { timestamp, latitude, longitude };
 
     // Retrieve existing file from S3
     let records = [];
