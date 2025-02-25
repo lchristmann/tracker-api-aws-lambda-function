@@ -41,14 +41,16 @@ Run `zip -r tracker-api-aws-lambda-function.zip . -x "README.md" -x ".git/*" -x 
 
 ## Testing
 
-The Lambda function can be tested by creating a test event (e.g. "LocationTestEvent") with such a JSON body:
+The Lambda function can be tested **in the AWS Management Console** with the "Test" feature in the Lambda console:
+
+- creating a test event (e.g. "LocationTestEvent") with such a JSON body:
 
 ```shell
 {
   "headers": {
     "x-api-key": "<SECRET_API_KEY>"
   },
-  "body": "{\"timestamp\": 1740407970321, \"longitude\": 48.3705406, \"latitude\": 10.8978019}"
+  "body": "{\"timestamp\": 1740499200000, \"latitude\": -26.679507, \"longitude\": 153.136417}"
 }
 ```
 
@@ -75,9 +77,9 @@ Create a POST request to `https://x7b9yw5krd.execute-api.ap-southeast-2.amazonaw
 
 ```json
 {
-  "timestamp": "1740407626179",
-  "longitude": 144.9631,
-  "latitude": -37.8136
+  "timestamp": "1740499200000",
+  "latitude": -26.679507,
+  "longitude": 153.136417
 }
 ```
 
@@ -88,8 +90,8 @@ curl -X POST https://x7b9yw5krd.execute-api.ap-southeast-2.amazonaws.com/prod/lo
   -H "Content-Type: application/json" \
   -H "x-api-key: <SECRET_API_KEY>" \
   -d '{
-    "timestamp": "1234567890102",
-    "longitude": 144.9631,
-    "latitude": -37.8136
+    "timestamp": "1740499200000",
+    "latitude": -26.679507,
+    "longitude": 153.136417
   }'
 ```
