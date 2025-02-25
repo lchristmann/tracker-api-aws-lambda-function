@@ -3,12 +3,19 @@ import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3
 // Documentation: https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/
 // Documentation: https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/GetObjectCommand/
 // Documentation: https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/PutObjectCommand/
+import { CloudFrontClient, CreateInvalidationCommand } from '@aws-sdk/client-cloudfront';
+// Documentation: https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/cloudfront/
+// Documentation: https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/cloudfront/command/CreateInvalidationCommand/
 
 // Initialize S3 client for eu-central-1 region
 const s3 = new S3Client({ region: 'eu-central-1' });
 
 const BUCKET_NAME = 'tracker-website';
 const FILE_KEY = 'locations.json';
+
+// Initialize CloudFront Client
+const cloudFront = new CloudFrontClient();
+const DISTRIBUTION_ID = 'E20PANU5T6FM4G';
 
 export const handler = async (event) => {
   try {
@@ -54,8 +61,24 @@ export const handler = async (event) => {
       Bucket: BUCKET_NAME,
       Key: FILE_KEY,
       Body: JSON.stringify(records, null, 2),
-      ContentType: 'application/json'
+      ContentType: 'application/json',
+      CacheControl: 'no-cache, must-revalidate'
     }));
+
+    // Create CloudFront invalidation for /locations.json
+    const invalidationCommand = new CreateInvalidationCommand({
+      DistributionId: DISTRIBUTION_ID,
+      InvalidationBatch: {
+        CallerReference: `invalidation-${Date.now()}`,
+        Paths: {
+          Quantity: 1,
+          Items: ['/locations.json']
+        }
+      }
+    });
+
+    await cloudFront.send(invalidationCommand);
+    console.log('CloudFront invalidation triggered for /locations.json');
 
     return {
       statusCode: 200,

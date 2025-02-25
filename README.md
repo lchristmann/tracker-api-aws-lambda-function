@@ -9,6 +9,8 @@ It reads and writes to the S3 bucket `tracker-website` (in region `eu-central-1`
 - via IAM role that allows access to the S3 bucket
 - the S3 bucket has a bucket policy allowing it to be accessed from this Lambda
 
+It also invalidates the CloudFront CDN cache of the `locations.json` file after it has written that file to the AWS S3 bucket. This makes it that we see fresh content on reloading the page and not stale old content that the CDN has cached.
+
 It lives in Australia's `ap-southeast-2` region (Sydney).
 
 ## What this Lambda does
